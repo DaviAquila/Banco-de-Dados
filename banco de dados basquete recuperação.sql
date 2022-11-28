@@ -59,21 +59,22 @@ ALTER TABLE times ADD CONSTRAINT times_fk4 FOREIGN KEY(id_regiao) REFERENCES reg
 
 ALTER TABLE ginasios ADD CONSTRAINT ginasios_fk0 FOREIGN KEY(id_regiao) REFERENCES regioes(id_regiao);
 
-select sum(id_jogador) as "Total de jogadores" from jogadores
 
 select AVG(j.salario) as "Media salarial de jogadores", AVG(tc.salario) as "Media salarial de Tecnicos"  from times t inner join jogadores j on t.id_jogador = j.id_jogador inner join tecnicos tc on t.id_tecnico = tc.id_tecnico
 
-select count(id_regiao) as "contador", nome as "Nome regioes" from regioes GROUP BY nome
+SELECT nome,FORMAT (dataNascimento, 'dd-MM-yy') as date from jogadores
 
 select t.nome as "nome do time", j.nome as "nome do jogador", j.posicao as "posicao jogador" from times t left join jogadores j on t.id_jogador = j.id_jogador
+
+select nome as "nome do time", (select sum(salario) from jogadores j inner join times t on j.id_jogador = t.id_jogador) as "gastos" from times group by nome
+
+select sum(id_jogador) as "Total de jogadores" from jogadores
+
+select count(id_regiao) as "contador", nome as "Nome regioes" from regioes GROUP BY nome
 
 select t.nome as "Nome do time", e.nome as "nome do ginasio", n.nome as "nome da regiao" from ginasios e inner join times t on e.id_ginasio = t.id_ginasio inner join regioes n on n.id_regiao = e.id_regiao ORDER BY t.nome, e.nome,n.nome ASC
 
 select	max(salario) as "Salario maximo dos jogadores", min(salario) as "Salario minimo dos jogadores" from jogadores
-
-select nome as "nome do time", (select sum(salario) from jogadores j inner join times t on j.id_jogador = t.id_jogador) as "gastos" from times group by nome
-
-SELECT nome,FORMAT (dataNascimento, 'dd-MM-yy') as date from jogadores
 
 SELECT nome from tecnicos where salario in(select max(salario) from tecnicos)
 
